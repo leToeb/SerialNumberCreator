@@ -1,0 +1,36 @@
+﻿<Window x:Class="SerialNumberCreator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SerialNumberCreator"
+        mc:Ignorable="d"
+        Title="SerialNumberCreator" Height="400" Width="400">
+    
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="5">
+            <Label Content="Current Date"/>
+            <DatePicker x:Name="Date_CurrentDate" SelectedDate="{Binding CurrentDate}"/>
+            <Label Content="Name of the Builder"/>
+            <TextBox x:Name="Box_Builder" Text="{Binding Builder}"/>
+            <Label Content="Working Title"/>
+            <TextBox x:Name="Box_WorkingTitle" Text="{Binding WorkingTitle}"/>
+            <Label Content="Working Place"/>
+            <TextBox x:Name="Box_WorkingPlace" Text="{Binding WorkingPlace}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="5">
+            <Label Content="Serial MD5"/>
+            <TextBox x:Name="LstSerialHash" Height="Auto" Text="{Binding ListSerialHash}"/>
+            <Button x:Name="CreateSerialHashCommand" Margin="5" Command="{Binding CreateHashCommand}">Create Serial MD5</Button>
+            <Button x:Name="SaveSerialHashCommand" Margin="5" Command="{Binding SaveHashCommand}">Save Serial MD5</Button>
+            <!--Button x:Name="LoadSerialHashCommand" Margin="5">Load Serial MD5</Button-->
+        </StackPanel>
+    </Grid>
+</Window>
