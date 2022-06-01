@@ -11,6 +11,8 @@ namespace SerialNumberCreator
         public string WorkingPlace { get; set; }
         public string SerialHash { get; set; }
 
+        public SerialNumberSet()
+        { }
         public SerialNumberSet(DateTime date, string builder, string workingTitle, string workingPlace, string serialHash)
         {
             Date = date;

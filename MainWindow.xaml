@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SerialNumberCreator"
         mc:Ignorable="d"
-        Title="SerialNumberCreator" Height="400" Width="400">
+        Title="SerialNumberCreator" Height="500" Width="400">
     
     <Window.DataContext>
         <local:MainWindowViewModel />
@@ -14,10 +14,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Margin="5">
             <Label Content="Current Date"/>
-            <DatePicker x:Name="Date_CurrentDate" SelectedDate="{Binding CurrentDate}"/>
+            <DatePicker x:Name="Date_CurrentDate" SelectedDate="{Binding CurrentDate}" SelectedDateFormat="Short"/>
             <Label Content="Name of the Builder"/>
             <TextBox x:Name="Box_Builder" Text="{Binding Builder}"/>
             <Label Content="Working Title"/>
@@ -29,8 +30,23 @@
             <Label Content="Serial MD5"/>
             <TextBox x:Name="LstSerialHash" Height="Auto" Text="{Binding ListSerialHash}"/>
             <Button x:Name="CreateSerialHashCommand" Margin="5" Command="{Binding CreateHashCommand}">Create Serial MD5</Button>
-            <Button x:Name="SaveSerialHashCommand" Margin="5" Command="{Binding SaveHashCommand}">Save Serial MD5</Button>
-            <!--Button x:Name="LoadSerialHashCommand" Margin="5">Load Serial MD5</Button-->
+            <Button x:Name="SaveSerialHashCommand" Margin="5" Command="{Binding SaveHashCommand}">Create und Save Serial MD5</Button>
+            <Button x:Name="FilterExistingSerialHashesCommand" Margin="5" Command="{Binding LoadExistingSerialHashCommand}" >Load Existing Serial MD5</Button>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Margin="5">
+            <ListBox x:Name="LstExistingSerialHashes" Height="100" ItemsSource="{Binding ExistingSerialNumbers}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding SerialHash}" FontWeight="Bold" />
+                            <TextBlock Text="{Binding Date}" />
+                            <TextBlock Text="{Binding Builder}" />
+                            <TextBlock Text="{Binding WorkingTitle}" />
+                            <TextBlock Text="{Binding WorkingPlace}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
     </Grid>
 </Window>
