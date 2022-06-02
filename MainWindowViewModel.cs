@@ -15,14 +15,15 @@ namespace SerialNumberCreator
         public MainWindowViewModel()
         {
             CreateHashCommand = new DelegateCommand(
-                (o) => 
+                (o) =>
                     //Die Prüfung des Datum auf ein leeres Inputfeld funktioniert so nicht
                     !CurrentDate.ToString().Equals("") &&
                     !WorkingTitle.Equals("") &&
                     !WorkingPlace.Equals("") &&
-                    !Builder.Equals("")  
+                    !Builder.Equals("")
                 ,
-                (o) => {
+                (o) =>
+                {
                     ListSerialHash = CreateMD5Hash();
                 }
             );
@@ -45,6 +46,15 @@ namespace SerialNumberCreator
                 {
                     LoadSerialNumber(ListSerialHash);
                 }
+            );
+
+            LoadAllExistingSerialHashCommand = new DelegateCommand(
+                (o) => true,
+                (o) =>
+                {
+                    LoadAllSerialNumbers();
+                }
+                
             );
 
             CurrentDate = DateTime.Now.Date;
@@ -73,8 +83,21 @@ namespace SerialNumberCreator
         private string workingTitle = "";
         private string workingPlace = "";
         private string listSerialHash = "";
+        private string infoLabel = "";
         private ObservableCollection<SerialNumberSet> existingSerialNumbers = new ObservableCollection<SerialNumberSet>();
 
+        public string InfoLabel
+        {
+            get => infoLabel;
+            set
+            {
+                if (!infoLabel.Equals(value))
+                {
+                    infoLabel = value;
+                    RaisePropertyChanged();                   
+                }
+            }
+        }
         public ObservableCollection<SerialNumberSet> ExistingSerialNumbers
         {
             get => existingSerialNumbers;
@@ -164,6 +187,8 @@ namespace SerialNumberCreator
 
         public DelegateCommand LoadExistingSerialHashCommand { get; set; }
 
+        public DelegateCommand LoadAllExistingSerialHashCommand { get; set; }
+
         private string CreateMD5Hash() {
 
 
@@ -200,35 +225,92 @@ namespace SerialNumberCreator
                         
             SerialNumberSet serielNumberSet = new SerialNumberSet(this.CurrentDate, this.Builder, this.WorkingTitle, this.WorkingPlace, this.ListSerialHash);
             string jsonText = serielNumberSet.toJson();
-            string jsonTitel = serielNumberSet.SerialHash;
-            //Hier sollte ein Ordner erstellt werden, in den die Serials gespeichert werden.
+            string jsonHash = serielNumberSet.SerialHash;
             string storagePath = "./Serials/";
 
-            if (!Directory.Exists(storagePath))
-            { 
-                Directory.CreateDirectory(storagePath);
-            }
-
-            string jsonPath = storagePath + jsonTitel + ".json";
-            File.WriteAllText(jsonPath, jsonText);
-        }
-
-        private void LoadSerialNumber(string jsonTitel)
-        {
-            string jsonPath = "./Serials/" + jsonTitel + ".json";
             try
             {
-                string jsonString = File.ReadAllText(jsonPath);
-                SerialNumberSet set;
-                set = JsonSerializer.Deserialize<SerialNumberSet>(jsonString)!;
-                existingSerialNumbers.Clear();
-                existingSerialNumbers.Add(set);
+                if (!Directory.Exists(storagePath))
+                {
+                    Directory.CreateDirectory(storagePath);
+                }
+
+                string jsonPath = storagePath + "serial_" + jsonHash + ".json";
+                File.WriteAllText(jsonPath, jsonText);
+                InfoLabel = "Created Serial saved.";
             }
             catch (Exception ex)
             {
-                existingSerialNumbers.Clear();
                 //TODO Ausnahmebehandlung
+                InfoLabel = "Saving created Serial fails.";
+            }
+ 
+        }
 
+        private void LoadSerialNumber(string jsonHash)
+        {
+            string filePath = "./Serials/";
+            string jsonPath = filePath + "serial_" + jsonHash + ".json";
+
+            if (Directory.Exists(filePath))
+            {
+                try
+                {
+                    string jsonString = File.ReadAllText(jsonPath);
+                    SerialNumberSet set;
+                    set = JsonSerializer.Deserialize<SerialNumberSet>(jsonString)!;
+                    existingSerialNumbers.Clear();
+                    existingSerialNumbers.Add(set);
+                    InfoLabel = "Serial found. Loading successfull.";
+                }
+                catch (Exception ex)
+                {
+                    existingSerialNumbers.Clear();
+                    //TODO Ausnahmebehandlung
+                    InfoLabel = "Serial not found.";
+
+                }
+            }
+            else {
+                existingSerialNumbers.Clear();
+                InfoLabel = "Could not find serial directory.";
+            }
+
+        }
+
+        private void LoadAllSerialNumbers()
+        {
+            string filePath = "./Serials/";
+            string[] files;
+
+            if (Directory.Exists(filePath))
+            {
+                files = Directory.GetFileSystemEntries(filePath, "serial_*");
+                existingSerialNumbers.Clear();
+
+                foreach (string file in files)
+                {
+                    try
+                    {
+                        string jsonString = File.ReadAllText(file);
+                        SerialNumberSet set;
+                        set = JsonSerializer.Deserialize<SerialNumberSet>(jsonString)!;
+                        existingSerialNumbers.Add(set);
+                        InfoLabel = files.Length + " Serials loaded.";
+                    }
+                    catch (Exception ex)
+                    {
+                        existingSerialNumbers.Clear();
+                        //TODO Ausnahmebehandlung
+                        InfoLabel = "Loading Serials failed.";
+
+                    }
+                }
+            }
+            else
+            {
+                existingSerialNumbers.Clear();
+                InfoLabel = "Could not find serial directory.";
             }
 
         }

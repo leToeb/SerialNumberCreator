@@ -14,4 +14,12 @@
     <Optimize>True</Optimize>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="WindowIcon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="WindowIcon.ico" />
+  </ItemGroup>
+
 </Project>

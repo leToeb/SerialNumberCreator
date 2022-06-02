@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SerialNumberCreator"
         mc:Ignorable="d"
-        Title="SerialNumberCreator" Height="500" Width="400">
+        Title="SerialNumberCreator" Height="600" Width="400" Icon="/WindowIcon.ico">
     
     <Window.DataContext>
         <local:MainWindowViewModel />
@@ -31,10 +31,11 @@
             <TextBox x:Name="LstSerialHash" Height="Auto" Text="{Binding ListSerialHash}"/>
             <Button x:Name="CreateSerialHashCommand" Margin="5" Command="{Binding CreateHashCommand}">Create Serial MD5</Button>
             <Button x:Name="SaveSerialHashCommand" Margin="5" Command="{Binding SaveHashCommand}">Create und Save Serial MD5</Button>
-            <Button x:Name="FilterExistingSerialHashesCommand" Margin="5" Command="{Binding LoadExistingSerialHashCommand}" >Load Existing Serial MD5</Button>
+            <Button x:Name="LoadExistingSerialHasheCommand" Margin="5" Command="{Binding LoadExistingSerialHashCommand}" >Load existing Serial</Button>
+            <Button x:Name="LoadAllExistingSerialHashesCommand" Margin="5" Command="{Binding LoadAllExistingSerialHashCommand}" >Load all existing Serial</Button>
         </StackPanel>
         <StackPanel Grid.Row="2" Margin="5">
-            <ListBox x:Name="LstExistingSerialHashes" Height="100" ItemsSource="{Binding ExistingSerialNumbers}">
+            <ListBox x:Name="LstExistingSerialHashes" Height="160" ItemsSource="{Binding ExistingSerialNumbers}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
@@ -47,6 +48,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <Label Content="{Binding InfoLabel}"/>
         </StackPanel>
     </Grid>
 </Window>
