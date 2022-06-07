@@ -24,7 +24,7 @@
             <DatePicker x:Name="Date_CurrentDate" SelectedDate="{Binding CurrentDate}" SelectedDateFormat="Short"/>
             <Label Content="Name of the Builder"/>
             <TextBox x:Name="Box_Builder" Text="{Binding Builder}"/>
-            <Label Content="Working Title"/>
+            <Label Content="Working Title / Description"/>
             <TextBox x:Name="Box_WorkingTitle" Text="{Binding WorkingTitle}"/>
             <Label Content="Working Place"/>
             <TextBox x:Name="Box_WorkingPlace" Text="{Binding WorkingPlace}"/>
