@@ -237,12 +237,12 @@ namespace SerialNumberCreator
 
                 string jsonPath = storagePath + "serial_" + jsonHash + ".json";
                 File.WriteAllText(jsonPath, jsonText);
-                InfoLabel = "Created Serial saved.";
+                InfoLabel = "Created serial saved.";
             }
             catch (Exception ex)
             {
                 //TODO Ausnahmebehandlung
-                InfoLabel = "Saving created Serial fails.";
+                InfoLabel = "Saving created serial fails.";
             }
  
         }
@@ -302,7 +302,7 @@ namespace SerialNumberCreator
                     {
                         existingSerialNumbers.Clear();
                         //TODO Ausnahmebehandlung
-                        InfoLabel = "Loading Serials failed.";
+                        InfoLabel = "Loading serials failed.";
 
                     }
                 }
