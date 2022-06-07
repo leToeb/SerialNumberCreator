@@ -24,12 +24,14 @@ namespace SerialNumberCreator
         {
             InitializeComponent();
             //Regestrierung beim Eventhandler im ViewModel
-            ((MainWindowViewModel)DataContext).MissingData += (sender, eventArge) => ShowError();
+            ((MainWindowViewModel)DataContext).MissingData += (sender, eventArge) => ShowError("Please enter value.");
+            ((MainWindowViewModel)DataContext).LoadingError += (sender, eventArge) => ShowError("Loading fails.");
+            ((MainWindowViewModel)DataContext).SavingError += (sender, eventArge) => ShowError("Saving fails.");
         }
 
-        public void ShowError()
+        public void ShowError(string text)
         {
-            MessageBox.Show("Please enter value.");
+            MessageBox.Show(text);
         }
 
 

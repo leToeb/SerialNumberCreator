@@ -14,6 +14,8 @@ namespace SerialNumberCreator
     {
         //Event, um die Message-Box zur Inputvalidierung zu triggern
         public event EventHandler MissingData;
+        public event EventHandler LoadingError;
+        public event EventHandler SavingError;
 
         public MainWindowViewModel()
         {
@@ -252,8 +254,8 @@ namespace SerialNumberCreator
             }
             catch (Exception ex)
             {
-                //TODO Ausnahmebehandlung
                 InfoLabel = "Saving created serial fails.";
+                SavingError.Invoke(this, EventArgs.Empty);
             }
  
         }
@@ -277,9 +279,8 @@ namespace SerialNumberCreator
                 catch (Exception ex)
                 {
                     existingSerialNumbers.Clear();
-                    //TODO Ausnahmebehandlung
                     InfoLabel = "Serial not found.";
-
+                    LoadingError.Invoke(this, EventArgs.Empty);
                 }
             }
             else {
@@ -299,24 +300,31 @@ namespace SerialNumberCreator
                 files = Directory.GetFileSystemEntries(filePath, "serial_*");
                 existingSerialNumbers.Clear();
 
-                foreach (string file in files)
+                if (files.Length > 0)
                 {
-                    try
+                    foreach (string file in files)
                     {
-                        string jsonString = File.ReadAllText(file);
-                        SerialNumberSet set;
-                        set = JsonSerializer.Deserialize<SerialNumberSet>(jsonString)!;
-                        existingSerialNumbers.Add(set);
-                        InfoLabel = files.Length + " Serials loaded.";
-                    }
-                    catch (Exception ex)
-                    {
-                        existingSerialNumbers.Clear();
-                        //TODO Ausnahmebehandlung
-                        InfoLabel = "Loading serials failed.";
-
+                        try
+                        {
+                            string jsonString = File.ReadAllText(file);
+                            SerialNumberSet set;
+                            set = JsonSerializer.Deserialize<SerialNumberSet>(jsonString)!;
+                            existingSerialNumbers.Add(set);
+                            InfoLabel = files.Length + " Serials loaded.";
+                        }
+                        catch (Exception ex)
+                        {
+                            existingSerialNumbers.Clear();
+                            InfoLabel = "Loading serials failed.";
+                            LoadingError.Invoke(this, EventArgs.Empty);
+                        }
                     }
                 }
+                else {
+                    existingSerialNumbers.Clear();
+                    InfoLabel = "No serials found.";
+                }
+                
             }
             else
             {
