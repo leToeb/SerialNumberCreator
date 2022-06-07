@@ -12,6 +12,9 @@ namespace SerialNumberCreator
 {
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
+        //Event, um die Message-Box zur Inputvalidierung zu triggern
+        public event EventHandler MissingData;
+
         public MainWindowViewModel()
         {
             CreateHashCommand = new DelegateCommand(
@@ -24,7 +27,15 @@ namespace SerialNumberCreator
                 ,
                 (o) =>
                 {
-                    ListSerialHash = CreateMD5Hash();
+                    //Durch die canExecute Definition dürfte diese Fehlernachricht nie geworfen werden.
+                    //Um dies zu provozieren muss mindestens eine Bedungung der canExecute Definition auskommentiert werden.
+                    if (String.IsNullOrWhiteSpace(WorkingTitle) || String.IsNullOrWhiteSpace(WorkingPlace) || String.IsNullOrWhiteSpace(Builder))
+                    {
+                        MissingData?.Invoke(this, EventArgs.Empty);
+                    }
+                    else {
+                        ListSerialHash = CreateMD5Hash();
+                    }
                 }
             );
 

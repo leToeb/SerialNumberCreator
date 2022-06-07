@@ -23,6 +23,15 @@ namespace SerialNumberCreator
         public MainWindow()
         {
             InitializeComponent();
+            //Regestrierung beim Eventhandler im ViewModel
+            ((MainWindowViewModel)DataContext).MissingData += (sender, eventArge) => ShowError();
         }
+
+        public void ShowError()
+        {
+            MessageBox.Show("Please enter value.");
+        }
+
+
     }
 }
