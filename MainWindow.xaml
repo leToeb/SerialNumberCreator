@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SerialNumberCreator"
         mc:Ignorable="d"
-        Title="SerialNumberCreator" Height="600" Width="400" Icon="/WindowIcon.ico">
+        Title="SerialNumberCreator" Height="600" Width="400" Icon="WindowIcon.ico">
     
     <Window.DataContext>
         <local:MainWindowViewModel />
